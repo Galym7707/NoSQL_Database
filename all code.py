@@ -1,4 +1,6 @@
 import json
+import os 
+from decimal import Decimal
 from typing import List, Dict, Any
 
 class Database:
@@ -86,3 +88,90 @@ class Database:
     def load(self):
         try:
             with open(f"{self.db_name}.json
+                      
+class DataType:
+    #Типы данных в таблицах
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+    def validate(self, value):
+        #Метод, проверяющий соответствие значения определенному типу данных
+        raise NotImplementedError
+
+
+class IntType(DataType):
+    #тип данных Int
+    def validate(self, value):
+        if not isinstance(value, int):
+            raise ValueError(f"{value} is not an integer")
+        return True
+
+
+class StrType(DataType):
+    #тип данных String
+    def validate(self, value):
+        if not isinstance(value, str):
+            raise ValueError(f"{value} is not a string")
+        return True
+
+
+class URLType(DataType):
+    #тип данных url
+    def validate(self, value):
+        if not isinstance(value, str):
+            raise ValueError(f"{value} is not a string")
+        if not value.startswith("http"):
+            raise ValueError(f"{value} is not a valid URL")
+        return True
+
+
+class FloatType(DataType):
+    #тип данных float
+    def validate(self, value):
+        if not isinstance(value, float):
+            raise ValueError(f"{value} is not a float")
+        return True
+
+
+class DecimalType(DataType):
+    #тип данных decimal
+    def validate(self, value):
+        if not isinstance(value, decimal.Decimal):
+            raise ValueError(f"{value} is not a decimal")
+        return True
+
+
+class Constraint:
+    #ограничения на поля таблиц
+    def __init__(self, field_name):
+        self.field_name = field_name
+
+    def validate(self, value):
+        """
+        Метод, проверяющий соответствие значения ограничению
+        """
+        raise NotImplementedError
+
+
+class NotNull(Constraint):
+    #ограничение NOT NULL
+    def validate(self, value):
+        if value is None:
+            raise ValueError(f"{self.field_name} cannot be null")
+        return True
+
+
+class PrimaryKey(Constraint):
+    #ограничение PRIMARY KEY
+    def __init__(self, field_name):
+        super().__init__(field_name)
+        self.values = set()
+
+    def validate(self, value):
+        if value in self.values:
+            raise ValueError(f"{value} already exists in primary key {self.field_name}")
+        self.values.add(value)
+        return True
