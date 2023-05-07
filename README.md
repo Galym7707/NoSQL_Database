@@ -1,5 +1,7 @@
 Код файла all code.py реализовывает класс NoSQL Database. Ниже представлено подробное описание кода.
 
+
+
 init(self, db_name: str) - инициализирует объект базы данных и создает словарь для таблиц.
 create_table(self, table_name: str, columns: Dict[str, str], primary_key: str) - создает новую таблицу с заданным именем, столбцами и первичным ключом и добавляет ее в словарь таблиц.
 add_row(self, table_name: str, row: Dict[str, Any]) - добавляет новую строку в заданную таблицу.
